@@ -1,0 +1,14 @@
+{
+  "name": "mocha-github-actions-reporter",
+  "version": "0.1.0",
+  "description": "Report for mocha that outputs Github Actions annotations",
+  "main": "index.js",
+  "repository": "https://github.com/albertfdp/mocha-github-actions-reporter",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.2.2"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.0"
+  }
+}
