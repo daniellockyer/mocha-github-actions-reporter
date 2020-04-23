@@ -1,6 +1,6 @@
 {
   "name": "mocha-github-actions-reporter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Report for mocha that outputs Github Actions annotations",
   "main": "index.js",
   "repository": "https://github.com/albertfdp/mocha-github-actions-reporter",
