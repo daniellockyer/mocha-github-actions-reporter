@@ -6,9 +6,9 @@
   "repository": "https://github.com/albertfdp/mocha-github-actions-reporter",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.2"
+    "@actions/core": "1.2.3"
   },
   "devDependencies": {
-    "mocha": "^7.0.0"
+    "mocha": "7.1.1"
   }
 }
