@@ -3,8 +3,15 @@
   "version": "0.2.0",
   "description": "Report for mocha that outputs Github Actions annotations",
   "main": "index.js",
-  "repository": "https://github.com/albertfdp/mocha-github-actions-reporter",
+  "author": "Daniel Lockyer",
+  "repository": "https://github.com/daniellockyer/mocha-github-actions-reporter",
+  "bugs": {
+    "url": "https://github.com/daniellockyer/mocha-github-actions-reporter/issues"
+  },
   "license": "MIT",
+  "scripts": {
+    "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn publish && git push --follow-tags; fi"
+  },
   "dependencies": {
     "@actions/core": "1.2.3"
   },
