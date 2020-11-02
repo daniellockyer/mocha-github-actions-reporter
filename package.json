@@ -1,6 +1,6 @@
 {
   "name": "mocha-github-actions-reporter",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Report for mocha that outputs Github Actions annotations",
   "main": "lib/index.js",
   "author": "Daniel Lockyer",
