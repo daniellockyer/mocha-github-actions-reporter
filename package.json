@@ -13,9 +13,7 @@
     "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn publish && git push --follow-tags; fi"
   },
   "dependencies": {
-    "@actions/core": "1.2.6"
-  },
-  "devDependencies": {
+    "@actions/core": "1.2.6",
     "mocha": "7.1.1"
   }
 }
