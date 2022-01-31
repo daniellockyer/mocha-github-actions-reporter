@@ -4,7 +4,7 @@ const mocha = require('mocha');
 
 // From https://github.com/findmypast-oss/mocha-json-streamier-reporter/blob/master/lib/parse-stack-trace.js
 function extractModuleLineAndColumn(stackTrace) {
-    let matches = /^\s*at Context.* \(([^\(\)]+):([0-9]+):([0-9]+)\)/gm.exec(stackTrace);
+    const matches = /^\s*at Context.* \(([^\(\)]+):([0-9]+):([0-9]+)\)/gm.exec(stackTrace);
 
     if (matches === null) {
         return {};
@@ -12,19 +12,9 @@ function extractModuleLineAndColumn(stackTrace) {
 
     return {
         file: matches[1],
-        line: parseIntOrUndefined(matches[2]),
-        column: parseIntOrUndefined(matches[3])
+        line: matches[2],
+        col: matches[3],
     };
-}
-
-function parseIntOrUndefined(numberString) {
-    const lineNumber = parseInt(numberString);
-
-    if (isNaN(lineNumber)) {
-        return undefined;
-    }
-
-    return lineNumber;
 }
 
 function GithubActionsReporter(runner, options) {
@@ -41,14 +31,7 @@ function GithubActionsReporter(runner, options) {
             core.startGroup('Mocha Annotations');
 
             for (const test of failures) {
-                const errMessage = test.err.message;
-                const moduleLineColumn = extractModuleLineAndColumn(test.err.stack);
-
-                issueCommand('error', {
-                    file: moduleLineColumn.file,
-                    line: moduleLineColumn.line + '',
-                    col: moduleLineColumn.column + ''
-                }, errMessage);
+                issueCommand('error', extractModuleLineAndColumn(test.err.stack), test.err.message);
             }
 
             core.endGroup();
