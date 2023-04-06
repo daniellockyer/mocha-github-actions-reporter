@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "test": "mocha --reporter index.js",
     "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn publish && git push --follow-tags; fi"
   },
   "dependencies": {
