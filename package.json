@@ -15,5 +15,8 @@
   "dependencies": {
     "@actions/core": "1.9.1",
     "mocha": "9.0.0"
+  },
+  "peerDependencies": {
+    "ms": "^2.0.0"
   }
 }
