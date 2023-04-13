@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { issueCommand } = require('@actions/core/lib/command');
 const mocha = require('mocha');
+const milliseconds = require('ms');
 
 // From https://github.com/findmypast-oss/mocha-json-streamier-reporter/blob/master/lib/parse-stack-trace.js
 function extractModuleLineAndColumn(stackTrace) {
@@ -22,11 +23,10 @@ function GithubActionsReporter(runner, options) {
 
     const failures = [];
 
-    runner.on(mocha.Runner.constants.EVENT_TEST_FAIL, function(test) {
+    runner.on(mocha.Runner.constants.EVENT_TEST_FAIL, (test) => {
         failures.push(test);
     });
-
-    runner.once(mocha.Runner.constants.EVENT_RUN_END, function() {
+    runner.once(mocha.Runner.constants.EVENT_RUN_END, () => {
         if (failures.length > 0) {
             core.startGroup('Mocha Annotations');
 
@@ -36,6 +36,14 @@ function GithubActionsReporter(runner, options) {
 
             core.endGroup();
         }
+        core.summary.addRaw(`:white_check_mark: ${this.stats.passes || 0} passing (${milliseconds(this.stats.duration)})`, true);
+        if (this.stats.pending) {
+            core.summary.addRaw(`:pause_button: ${this.stats.pending} pending`, true);
+        }
+        if (this.stats.failures) {
+            core.summary.addRaw(`:x: ${this.stats.failures} failing`, true);
+        }
+        core.summary.write();
     });
 }
 
