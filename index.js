@@ -1,4 +1,5 @@
 const core = require('@actions/core');
+const { SUMMARY_ENV_VAR } = require('@actions/core/lib/summary');
 const { issueCommand } = require('@actions/core/lib/command');
 const mocha = require('mocha');
 const milliseconds = require('ms');
@@ -36,14 +37,17 @@ function GithubActionsReporter(runner, options) {
 
             core.endGroup();
         }
-        core.summary.addRaw(`:white_check_mark: ${this.stats.passes || 0} passing (${milliseconds(this.stats.duration)})`, true);
-        if (this.stats.pending) {
-            core.summary.addRaw(`:pause_button: ${this.stats.pending} pending`, true);
+        // Check if Job Summary is supported on this platform
+        if (process.env[SUMMARY_ENV_VAR]) {
+            core.summary.addRaw(`:white_check_mark: ${this.stats.passes || 0} passing (${milliseconds(this.stats.duration)})`, true);
+            if (this.stats.pending) {
+                core.summary.addRaw(`:pause_button: ${this.stats.pending} pending`, true);
+            }
+            if (this.stats.failures) {
+                core.summary.addRaw(`:x: ${this.stats.failures} failing`, true);
+            }
+            core.summary.write();
         }
-        if (this.stats.failures) {
-            core.summary.addRaw(`:x: ${this.stats.failures} failing`, true);
-        }
-        core.summary.write();
     });
 }
 
