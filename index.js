@@ -5,15 +5,22 @@ const mocha = require('mocha');
 const milliseconds = require('ms');
 
 // From https://github.com/findmypast-oss/mocha-json-streamier-reporter/blob/master/lib/parse-stack-trace.js
-function extractModuleLineAndColumn(stackTrace) {
+function extractModuleLineAndColumn(stackTrace, options) {
     const matches = /^\s*at Context.* \(([^\(\)]+):([0-9]+):([0-9]+)\)/gm.exec(stackTrace);
 
     if (matches === null) {
         return {};
     }
+    let file = matches[1];
+    if (options && options.reporterOptions && options.reporterOptions.convertPath) {
+        if (!Array.isArray(options.reporterOptions.convertPath) || options.reporterOptions.convertPath.length != 2) {
+            throw new Error('reporterOptions.convertPath should be an array of length 2');
+        }
+        file = file.replace(options.reporterOptions.convertPath[0], options.reporterOptions.convertPath[1]);
+    }
 
     return {
-        file: matches[1],
+        file: file,
         line: matches[2],
         col: matches[3],
     };
@@ -32,7 +39,7 @@ function GithubActionsReporter(runner, options) {
             core.startGroup('Mocha Annotations');
 
             for (const test of failures) {
-                issueCommand('error', extractModuleLineAndColumn(test.err.stack), test.err.message);
+                issueCommand('error', extractModuleLineAndColumn(test.err.stack, options), test.err.message);
             }
 
             core.endGroup();
